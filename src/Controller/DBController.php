@@ -43,7 +43,7 @@ class DBController extends AbstractController
                 return new Response("User " . $username . " does not exist.");
             else
             {
-                if($checkUser->getPassword() == $password)
+                if(password_verify($password, $checkUser->getPassword()))
                     return new Response("Password Correct", Response::HTTP_ACCEPTED);
                 else
                     return new Response("Username or Password wrong", Response::HTTP_NOT_ACCEPTABLE);

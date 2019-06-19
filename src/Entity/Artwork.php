@@ -32,6 +32,8 @@ class Artwork
      */
     private $artist;
 
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,4 +74,6 @@ class Artwork
 
         return $this;
     }
+
+
 }

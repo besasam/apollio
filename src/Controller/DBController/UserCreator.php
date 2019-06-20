@@ -16,7 +16,7 @@ class UserCreator extends AbstractController
     private $passwordEncoder;
 
     /**
-    * @Route("/user/new", methods="POST")
+    * @Route("/api/user/new", methods="POST")
     */
     public function createNewUser(UserPasswordEncoderInterface $passwordEncoder)
     {

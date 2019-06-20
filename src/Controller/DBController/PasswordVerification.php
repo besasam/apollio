@@ -13,9 +13,9 @@ class PasswordVerification extends AbstractController
 {
 
     /**
-     * @Route("/user/login/password-validation", methods="POST")
+     * @Route("/api/user/login/password-verification", methods="POST")
      */
-    public function passwordValidation()
+    public function passwordVerification()
     {
         if(!isset($_POST["username"]) || !isset($_POST["password"]))
         {

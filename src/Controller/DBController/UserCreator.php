@@ -16,8 +16,15 @@ class UserCreator extends AbstractController
     private $passwordEncoder;
 
     /**
-    * @Route("/api/user/new", methods="POST")
-    */
+     * @Route("/api/user/new", methods="POST")
+     */
+    /*
+     * HTTP_CREATED: User was created successfully
+     * HTTP_BAD_REQUEST: Not All Required Fields are set
+     * HTTP_PRECONDITION_FAILED: Password and repeat-password don't match
+     * HTTP_NOT_ACCEPTABLE: Username contains forbidden symbols
+     * HTTP_FORBIDDEN: Username is already taken
+     */
     public function createNewUser(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
@@ -25,7 +32,7 @@ class UserCreator extends AbstractController
         if(isset($data['username']) && isset($data['password']) &&
             isset($data['passwordRepeat']) && isset($data['email']))
         {
-            $validate = $this->validateNewUser($data['email'], $data['password'], $data['passwordRepeat']);
+            $validate = $this->validateNewUser($data['username'], $data['email'], $data['password'], $data['passwordRepeat']);
             if($validate !== Response::HTTP_OK)
                 return new Response('{}', $validate, ['filetype' => 'json']);
             $entityManager = $this->getDoctrine()->getManager();
@@ -41,11 +48,13 @@ class UserCreator extends AbstractController
         }
     }
 
-    private function validateNewUser($email, $password, $passwordRepeat)
+    private function validateNewUser($username, $email, $password, $passwordRepeat)
     {
         if($password !== $passwordRepeat) return Response::HTTP_PRECONDITION_FAILED;
         $entityManager = $this->getDoctrine()->getRepository(User::class);
         $checkUser = $entityManager->findOneBy(['email' => $email]);
+        if (!preg_match("#^[a-zA-Z0-9]+$#", $username))
+            return Response::HTTP_NOT_ACCEPTABLE;
         if(is_null($checkUser)) return Response::HTTP_OK;
         else return Response::HTTP_FORBIDDEN;
     }

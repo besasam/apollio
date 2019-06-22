@@ -26,4 +26,11 @@ class PageController extends AbstractController
         return $this->render('register.html.twig', ['action' => '/api/user/new']);
     }
 
+    /**
+     * @Route("/upload", name="upload")
+     */
+    public function upload() {
+        return $this->render('upload.html.twig', ['action' => '/api/artwork/new']);
+    }
+
 }

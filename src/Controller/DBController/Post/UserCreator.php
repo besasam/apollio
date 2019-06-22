@@ -16,6 +16,8 @@ class UserCreator extends AbstractController
     private $passwordEncoder;
 
     /**
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return Response
      * @Route("/api/user/new", methods="POST")
      */
     /*
@@ -48,6 +50,13 @@ class UserCreator extends AbstractController
         }
     }
 
+    /**
+     * @param $username
+     * @param $email
+     * @param $password
+     * @param $passwordRepeat
+     * @return int
+     */
     private function validateNewUser($username, $email, $password, $passwordRepeat)
     {
         if($password !== $passwordRepeat) return Response::HTTP_PRECONDITION_FAILED;

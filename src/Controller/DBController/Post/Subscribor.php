@@ -15,7 +15,7 @@ class Subscribor extends AbstractController
     /**
      * @param string $username
      * @return Response
-     * @Route("/api/user/{username}/subscribe", methods={POST})
+     * @Route("/api/user/{username}/subscribe", methods="POST")
      */
     /*
      * HTTP_FORBIDDEN: Tried to subscribe to himself

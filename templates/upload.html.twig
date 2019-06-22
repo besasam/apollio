@@ -3,7 +3,7 @@
 {% block title %} | Upload{% endblock %}
 
 {% block body %}
-    <form method="post" action={{ action }}>
+    <form method="post" action="{{ action }}" enctype="multipart/form-data">
         <h1 class="h3 mb-3 font-weight-normal">Upload</h1>
         <div class="form-group">
             <label for="inputTitle">Title</label>
@@ -12,7 +12,7 @@
         <div class="form-group">
         <div class="custom-file">
             <label for="inputFile" class="custom-file-label">File</label>
-            <input type="file" name="file" id="inputFile" class="custom-file-input" required>
+            <input type="file" name="file" id="inputFile" class="custom-file-input" accept="image/*" required>
         </div>
         </div>
 

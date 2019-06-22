@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\DBController;
+namespace App\Controller\DBController\Post;
 
 
 use App\Entity\User;

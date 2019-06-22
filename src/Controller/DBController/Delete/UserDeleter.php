@@ -15,7 +15,7 @@ class UserDeleter extends AbstractController
 {
     /**
      * @return Response
-     * @Route("/api/user/delete", methods={"POST"})
+     * @Route("/api/user/delete", methods="POST")
      */
     /*
      * HTTP_BAD_REQUEST usernameConfirmation was not submitted
@@ -39,11 +39,11 @@ class UserDeleter extends AbstractController
 
         $mngr = $this->getDoctrine()->getManager();
         try{
-            $artworks = $mngr->getRepository(Artwork::class)->findBy(["artist"=>$user]);
+            $artworks = $user->getArtworks();
             /** @var Artwork $aw */
             foreach($artworks as $aw) //delete all the artworks that belong to this user
             {
-                unlink($aw->getFilelink());
+                unlink($this->getParameter('upload_directory'). '/' . $aw->getFilelink());
                 $mngr->remove($aw);
             }
 
@@ -56,6 +56,7 @@ class UserDeleter extends AbstractController
                 $user->removeSubscription($sub);
 
             $mngr->remove($user); //Then, remove the user themselves
+            $mngr->flush(); //Apply changes to database
 
         } catch (Exception $e) {
             return new Response('{}', Response::HTTP_INTERNAL_SERVER_ERROR);

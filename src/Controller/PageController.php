@@ -37,7 +37,7 @@ class PageController extends AbstractController
      * @Route("/settings", name="settings")
      */
     public function settings() {
-        return $this->render('settings.html.twig');
+        return $this->render('settings.html.twig', ['action' => '/api/user/delete']);
     }
 
 }

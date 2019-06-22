@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\DBController;
+namespace App\Controller\DBController\Get;
 
 use App\Entity\Artwork;
 use App\Entity\User;

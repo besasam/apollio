@@ -26,8 +26,6 @@ class PageController extends AbstractController
         return $this->render('register.html.twig', ['action' => '/api/user/new']);
     }
 
-<<<<<<< Updated upstream
-=======
     /**
      * @Route("/upload", name="upload")
      */
@@ -42,5 +40,4 @@ class PageController extends AbstractController
         return $this->render('settings.html.twig');
     }
 
->>>>>>> Stashed changes
 }

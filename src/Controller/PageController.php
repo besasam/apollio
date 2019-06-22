@@ -15,7 +15,15 @@ class PageController extends AbstractController
      * @Route("/", name="index")
      */
     public function index() {
-        return $this->render('base.html.twig');
+        $data = ['1', '2', '3'];
+        return $this->render('home.html.twig', ['data' => $data]);
+    }
+
+    /**
+     * @Route("/register", name="register")
+     */
+    public function register() {
+        return $this->render('register.html.twig', ['action' => '/user/new']);
     }
 
 }

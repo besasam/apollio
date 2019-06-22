@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for d in data %}
-        <p>{{ d }}</p>
-    {% endfor %}
+    {% if app.user %}
+        <h1>Latest Uploads</h1>
+        <hr class="my-3">
+    {% else %}
+        <p>Welcome to <strong>apoll.io</strong>, a platform for artists to share their work!</p>
+        <p>Please <a href="/register">sign up</a> to access the full functionality of the site.</p>
+    {% endif %}
 {% endblock %}

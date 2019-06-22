@@ -5,6 +5,7 @@ namespace App\Controller\DBController;
 
 use \Exception;
 use App\Entity\Artwork;
+use App\Entity\User;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -23,7 +24,7 @@ class ArtworkCreator extends AbstractController
     public function createArtwork()
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        /** @var \App\Entity\User $userID */
+        /** @var User $user */
         $user = $this->getUser();
         $data = $_POST;
         $newArtwork = new Artwork();

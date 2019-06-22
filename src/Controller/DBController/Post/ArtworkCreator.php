@@ -23,7 +23,7 @@ class ArtworkCreator extends AbstractController
      */
     public function createArtwork()
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         /** @var User $user */
         $user = $this->getUser();
         $data = $_POST;

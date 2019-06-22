@@ -15,7 +15,7 @@ class PageController extends AbstractController
      * @Route("/", name="index")
      */
     public function index() {
-        return new Response("henlo worl");
+        return $this->render('base.html.twig');
     }
 
 }

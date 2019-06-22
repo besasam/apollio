@@ -13,36 +13,46 @@ class ArtworkGetter extends AbstractController
 {
 
     /**
-     * @Route("/api/user/{username}/artworks", methods={"GET"})
+     * @param string $username
+     * @param int $count
+     * @param int $offset
+     * @return Response
+     * @Route("/api/user/{username}/artworks/{count}/{offset}", methods={"GET"})
      */
-    public function getArtworksPerUser(string $username)
+    public function getArtworksPerUser(string $username, int $count, int $offset)
     {
         //TODO: Insert Files into Array
         $artist = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$username]);
         if(is_null($artist)) return new Response('{}',Response::HTTP_BAD_REQUEST);
 
         $artworks = $this->getDoctrine()->getManager()->getRepository(User::class)->
-            getFirstNArtworks(10,$artist); //getFirstNArtworks is defined in UserRepository
+            getFirstNArtworks($count,$artist,$offset); //getFirstNArtworks is defined in UserRepository
 
         return new Response(json_encode($artworks), Response::HTTP_OK, ['filetype' => 'json']);
     }
 
     /**
-     * @Route("/api/profile/artworks", methods={"GET"})
+     * @param int $count
+     * @param int $offset
+     * @return Response
+     * @Route("/api/profile/artworks/{count}/{offset}", methods={"GET"})
      */
-    public function getOwnArtworks()
+    public function getOwnArtworks(int $count, int $offset)
     {
         $user = $this->getUser();
-        return $this->getArtworksPerUser($user);
+        return $this->getArtworksPerUser($user, $count, $offset);
     }
 
     /**
-     * @Route("/api/artworks", methods={"GET"})
+     * @param int $count
+     * @param int $offset
+     * @return Response
+     * @Route("/api/artworks/{count}/{offset}", methods={"GET"})
      */
-    public function getAllArtworks()
+    public function getAllArtworks(int $count, int $offset)
     {
         $artworks = $this->getDoctrine()->getManager()->getRepository(Artwork::class)->
-            getArtworks(); //getArtworks is defined in ArtworkRepository, returns first n=10 artworks starting at m=0
-        return new Response(json_encode($artworks), Response::HTTP_OK, ['filetype' => 'json']);
+            getArtworks($count,$offset); //getArtworks is defined in ArtworkRepository, returns first n=10 artworks starting at m=0
+        return new Response(json_encode($artworks),Response::HTTP_OK, ['filetype' => 'json']);
     }
 }

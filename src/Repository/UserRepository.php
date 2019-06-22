@@ -21,13 +21,15 @@ class UserRepository extends ServiceEntityRepository
     }
 
     //returns List of Artwork objects, order by date desc limit n
-    public function getFirstNArtworks(int $n, User $u): array
+    public function getFirstNArtworks(int $n, User $u, int $offset): array
     {
         $em = $this->getEntityManager();
 
         $query = $em->createQuery(
             'SELECT a FROM App\Entity\Artwork a WHERE a.artist = :u order by a.created_at desc'
-        )->setParameters(['u'=>$u])->setMaxResults($n);
+        )->setParameters(['u'=>$u])->setMaxResults($n)->setFirstResult($offset);
+
+        //TODO Verify that setMaxResults->setFirstResults returns the right result
 
         return $query->execute();
 

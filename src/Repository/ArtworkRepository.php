@@ -19,12 +19,12 @@ class ArtworkRepository extends ServiceEntityRepository
         parent::__construct($registry, Artwork::class);
     }
 
-    public function getArtworks(int $number=10, int $offset=0)
+    public function getArtworks(int $count=10, int $offset=0)
     {
         $em = $this->getEntityManager();
         $query = $em->createQuery(
             'SELECT a FROM App\Entity\Artwork a order by a.created_at desc'
-        )->setMaxResults($number)->setFirstResult($offset);
+        )->setMaxResults($count)->setFirstResult($offset);
 
         //TODO verify if setMaxResults->setFirstResult works, or if order has to be flipped
 

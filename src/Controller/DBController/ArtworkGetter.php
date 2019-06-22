@@ -16,18 +16,26 @@ class ArtworkGetter extends AbstractController
     private $data;
 
     /**
-     * @Route("/api/user/{id}/artworks", methods={"GET"})
+     * @Route("/api/user/{username}/artworks", methods={"GET"})
      */
-    public function getArtworksPerUser(int $id)
+    public function getArtworksPerUser(string $username)
     {
         //TODO: Insert Files into Array
-        $artist = $this->getDoctrine()->getRepository(User::class)->find($id);
-        if(is_null($id)) return new Response('{}',Response::HTTP_BAD_REQUEST);
+        $artist = $this->getDoctrine()->getRepository(User::class)->findOneBy(['usename'=>$username]);
+        if(is_null($artist)) return new Response('{}',Response::HTTP_BAD_REQUEST);
 
         $artworks = $this->getDoctrine()->getManager()->getRepository(User::class)->
             getFirstNArtworks(10,$artist); //getFirstNArtworks is defined in UserRepository
 
-
         return new Response(json_encode($artworks), Response::HTTP_OK, ['filetype' => 'json']);
+    }
+
+    /**
+     * @Route("/api/profile/artworks", methods={"GET"})
+     */
+    public function getOwnArtworks()
+    {
+        $user = $this->getUser();
+        return $this->getArtworksPerUser($user);
     }
 }

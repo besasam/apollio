@@ -23,7 +23,7 @@ class PageController extends AbstractController
      * @Route("/register", name="register")
      */
     public function register() {
-        return $this->render('register.html.twig', ['action' => '/user/new']);
+        return $this->render('register.html.twig', ['action' => '/api/user/new']);
     }
 
 }

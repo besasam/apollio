@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\DBALException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -17,6 +18,19 @@ class UserRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    //returns List of Artwork objects, order by date desc limit n
+    public function getFirstNArtworks(int $n, User $u): array
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\Artwork a WHERE a.artist = :u order by a.created_at desc'
+        )->setParameters(['u'=>$u])->setMaxResults($n);
+
+        return $query->execute();
+
     }
 
     // /**

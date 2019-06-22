@@ -61,6 +61,7 @@ class UserDeleter extends AbstractController
         } catch (Exception $e) {
             return new Response('{}', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        session_destroy();
         return new Response('{}', Response::HTTP_OK);
     }
 }

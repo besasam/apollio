@@ -40,4 +40,15 @@ class PageController extends AbstractController
         return $this->render('settings.html.twig', ['action' => '/api/user/delete']);
     }
 
+    /**
+     * @Route("/u/{user}", name="profile")
+     */
+    public function profile($user) {
+        return $this->render('profile.html.twig', [
+            "artist" => $user,
+            "subCount" => 12, "artworks" => [
+                ["id" => "id", "title" => "title", "filelink" => "filelink", "artist" => "artist", "created_at" => "created_at"]
+            ]]);
+    }
+
 }

@@ -51,10 +51,10 @@ class PageController extends AbstractController
     public function profile($user, $page) {
         $pg = new ProfileGetter();
         if($page == 1) {
-            $data = (array) json_decode($pg->getProfile($user, 0, $this->getDoctrine())->getContent());
+            $data = (array) json_decode($pg->getProfile($user, 0, $this->getDoctrine(), $this->getUser())->getContent());
         } else {
             $offset = ($page - 1) * 10;
-            $data = (array) json_decode($pg->getProfile($user, $offset, $this->getDoctrine())->getContent());
+            $data = (array) json_decode($pg->getProfile($user, $offset, $this->getDoctrine(), $this->getUser())->getContent());
         }
         $pages = intdiv($data["awCount"], 10) + 1;
         return $this->render('profile.html.twig', [
@@ -62,6 +62,7 @@ class PageController extends AbstractController
             "currentPage" => $page,
             "pages" => $pages,
             "subCount" => $data["subCount"],
+            "subscribed" => $data["subscribed"],
             "awCount" => $data["awCount"],
             "artworks" => $data["artworks"]
         ]);
@@ -92,7 +93,9 @@ class PageController extends AbstractController
      * @Route("/subscriptions", name="subscriptions")
      */
     public function subscriptions() {
-        return $this->render('subscriptions.html.twig');
+        return $this->render('subscriptions.html.twig', [
+            "subscribed" => $this->getUser()->getSubscriptionsAsArray()
+        ]);
     }
 
 }

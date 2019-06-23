@@ -1,5 +1,5 @@
 # apoll.io
-Art sharing platform
+Art sharing platform. apoll.io allows you to share your artwork and follow other artists.
 
 ## How to install
 

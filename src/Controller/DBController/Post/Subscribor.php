@@ -13,9 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class Subscribor extends AbstractController
 {
     /**
-     * @param string $username
+     * @param User $user
+     * @param User $subscribed
      * @return Response
-     * @Route("/api/user/{username}/subscribe", methods="POST")
      */
     /*
      * HTTP_FORBIDDEN: Tried to subscribe to himself
@@ -23,17 +23,8 @@ class Subscribor extends AbstractController
      * HTTP_INTERNAL_SERVER_ERROR: Subscription could not be added. Try again or inform an administrator.
      * HTTP_OK: Subscription successfully added; Returns sub-number for subscribed user
      */
-    public function subscribe(string $username)
+    public function subscribe(User $user, User $subscribed)
     {
-        $repo = $this->getDoctrine()->getRepository(User::class);
-
-        $user = $this->getUser();
-        if($user->getUsername() == $username)
-            return new Response('{}', Response::HTTP_FORBIDDEN, ['filetype'=>'json']);
-
-        $subscribed = $repo->findOneBy(['username'=>$username]);
-        if(!$subscribed) return new Response('{}', Response::HTTP_BAD_REQUEST);
-
         try {
             $user->addSubscription($subscribed);
         } catch (Exception $e) {
@@ -42,5 +33,50 @@ class Subscribor extends AbstractController
 
         return new Response("{'subscribers':". $subscribed->getSubscribers()->count() ."}",
             Response::HTTP_OK, ['filetype'=>'json']);
+    }
+
+    /**
+     * @param User $user
+     * @param User $subscribed
+     * @return Response
+     */
+    /*
+     * HTTP_FORBIDDEN: You can't sub yourself
+     * HTTP_BAD_REQUEST: User doesn't exist
+     * HTTP_INTERNAL_SERVER_ERROR: Database error OR Subscription doesn't exist
+     * HTTP_OK: Successfully removed
+     */
+    public function unsubscribe(User $user, User $subscribed)
+    {
+        try {
+            $user->removeSubscription($subscribed);
+        } catch (Exception $e) {
+            return new Response($e, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return new Response("{'subscribers':". $subscribed->getSubscribers()->count() ."}",
+            Response::HTTP_OK, ['filetype'=>'json']);
+    }
+
+    /**
+     * @param $username
+     * @return Response
+     * @Route("api/user/{username}/togglesubscribe", methods={"POST"})
+     */
+    public function toggleSubscribe($username)
+    {
+        $repo = $this->getDoctrine()->getRepository(User::class);
+        /** @var User $user */
+        $user = $this->getUser();
+        if($user->getUsername() == $username)
+            return new Response('{}', Response::HTTP_FORBIDDEN, ['filetype'=>'json']);
+        /** @var User $subscribed */
+        $subscribed = $repo->findOneBy(['username'=>$username]);
+        if(!$subscribed) return new Response('{}', Response::HTTP_BAD_REQUEST);
+
+        if($subscribed->getSubscribers()->contains($user))
+            return $this->unsubscribe($user,$subscribed);
+        else
+            return $this->subscribe($user,$subscribed);
     }
 }

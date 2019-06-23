@@ -5,7 +5,7 @@ Art sharing platform
 
 **Requirements**: PHP >= 7.1.3, Composer, MySQL
 
-Clone the directory and run `composer install` to download and install the required packages.
+Clone the repository and run `composer install` to download and install the required packages.
 
 Create the file `/.env.local` containing your database credentials: 
 

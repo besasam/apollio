@@ -8,6 +8,7 @@ use App\Entity\Artwork;
 use App\Entity\User;
 use \Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -62,6 +63,7 @@ class UserDeleter extends AbstractController
             return new Response('{}', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         session_destroy();
-        return new Response('{}', Response::HTTP_OK);
+        //return new Response('{}', Response::HTTP_OK);
+        return new RedirectResponse("/user/delete/success");
     }
 }

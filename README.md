@@ -20,7 +20,7 @@ php bin/console doctrine:migrations:migrate
 ```
 to create the database structure for the app.
 
-*Optional:* Unzip the contents of `sample_images.zip` into `/public/uploads` and run `sample.sql` if you want to use the sample/testing data for the app.
+*Optional:* Unzip the contents of `sample_images.zip` into `/public/uploads` and run `sample.sql` if you want to use the sample/testing data for the app. It includes three user accounts (*tiberius*, *picard*, *burnham*; each with the password *test*), 20 uploads and some subscriptions between the users.
 
 If you want to run the app on the local test server, run:
 

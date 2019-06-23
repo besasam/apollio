@@ -15,8 +15,7 @@ class PageController extends AbstractController
      * @Route("/", name="index")
      */
     public function index() {
-        $data = ['1', '2', '3'];
-        return $this->render('home.html.twig', ['data' => $data]);
+        return $this->render('home.html.twig');
     }
 
     /**
@@ -49,6 +48,27 @@ class PageController extends AbstractController
             "subCount" => 12, "artworks" => [
                 ["id" => "id", "title" => "title", "filelink" => "filelink", "artist" => "artist", "created_at" => "created_at"]
             ]]);
+    }
+
+    /**
+     * @Route("/u/{user}/{page}", name="profile-paginated"), requirements={"page"="\d+"}
+     */
+    public function profilePaginated($user, $page) {
+        return $this->render('profile.html.twig');
+    }
+
+    /**
+     * @Route("/u/{user}/view/{artwork}", name="viewArtwork")
+     */
+    public function view($user, $artwork) {
+        return $this->render('artwork.html.twig', ["artist" => $user, "artwork" => ["title" => "title", "filelink" => "#"]]);
+    }
+
+    /**
+     * @Route("/subscriptions", name="subscriptions")
+     */
+    public function subscriptions() {
+        return $this->render('subscriptions.html.twig');
     }
 
 }

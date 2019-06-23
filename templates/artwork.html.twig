@@ -1,2 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block body %}
+
+    <h1>{{ artwork.title }}</h1>
+    <p>by <strong><a href="/u/{{ artist }}">{{ artist }}</a></strong></p>
+
+    <img src="/uploads/{{ artwork.filelink }}" width="auto">
+
+{% endblock %}

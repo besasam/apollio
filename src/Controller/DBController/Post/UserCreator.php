@@ -31,29 +31,28 @@ class UserCreator extends AbstractController
     {
         $this->passwordEncoder = $passwordEncoder;
         $data = $_POST;
-        if(isset($data['username']) && isset($data['password']) &&
-            isset($data['passwordRepeat']) && isset($data['email']))
-        {
-            $validate = $this->
-                validateNewUser($data['username'], $data['email'], $data['password'], $data['passwordRepeat']);
-            if($validate !== Response::HTTP_OK)
-                return new Response('{}', $validate, ['filetype' => 'json']);
-
-            //Creating the user object, since we now know that the user data is valid
-            try {
-                $entityManager = $this->getDoctrine()->getManager();
-                $newUser = new User();
-                $newUser->setUsername($data["username"]);
-                $newUser->setPassword($this->passwordEncoder->encodePassword($newUser, $data["password"]));
-                $newUser->setEmail($data["email"]);
-                $entityManager->persist($newUser);
-                $entityManager->flush();
-            } catch (Exception $e) {
-                return new Response($e, Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-            return new Response("New user created!", Response::HTTP_CREATED);
-        } else {
+        if(!( isset($data['username']) && isset($data['password']) &&
+            isset($data['passwordRepeat']) && isset($data['email']) ))
             return new Response('{}', Response::HTTP_BAD_REQUEST, ['filetype' => 'json']);
+
+        $validate = $this->
+            validateNewUser($data['username'], $data['email'], $data['password'], $data['passwordRepeat']);
+        if($validate !== Response::HTTP_OK)
+            return new Response('{}', $validate, ['filetype' => 'json']);
+            //validation happens in separate function for readability
+
+            //Creating the user object with all its fields, since we now know that the user data is valid
+        try {
+            $entityManager = $this->getDoctrine()->getManager();
+            $newUser = new User();
+            $newUser->setUsername($data["username"]);
+            $newUser->setPassword($this->passwordEncoder->encodePassword($newUser, $data["password"]));
+            $newUser->setEmail($data["email"]);
+            $entityManager->persist($newUser);
+            $entityManager->flush(); //committing the new object to the database
+            return new Response("New user created!", Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            return new Response($e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

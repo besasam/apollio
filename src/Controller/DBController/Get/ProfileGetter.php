@@ -17,17 +17,22 @@ class ProfileGetter extends AbstractController
      * @return Response
      * @Route("/api/user/{username}/profile/{offset}", methods={"GET"}, defaults={"offset"=0})
      */
-    public function getProfile($username, $offset, $doctrine = NULL)
+    public function getProfile($username, $offset, $doctrine = NULL, $curUser = NULL)
     {
         /** @var User $user */
         if(!$doctrine) {
             $doctrine = $this->getDoctrine();
         }
+        if(!$curUser) {
+            $curUser = $this->getUser();
+        }
         $user = $doctrine->getRepository(User::class)->findOneBy(['username'=>$username]);
         try {
             $subCount = $user->getSubscribers()->count(); //Number of Subscribers to show on the subscribe-button
+            $subscribed = $user->hasSubscriber($curUser);
         } catch(Exception $e) {
             $subCount = 0;
+            $subscribed = false;
         }
         try {
             $awCount = $user->getArtworks()->count(); //Number of artworks to construct the pagination on profile
@@ -39,9 +44,9 @@ class ProfileGetter extends AbstractController
             }
         } catch(Exception $e) {
             $awCount = 0;
-            $artworks = [];
+            $artworksArr = [];
         }
-        $returnArray = ["subCount" => $subCount, "awCount" => $awCount, "artworks" => $artworksArr];
+        $returnArray = ["subCount" => $subCount, "subscribed" => $subscribed, "awCount" => $awCount, "artworks" => $artworksArr];
         return new Response(json_encode($returnArray), Response::HTTP_OK, ['filetype'=>'json']);
             //The attributes of the returned json object can be used to build the page in FE
     }

@@ -3,8 +3,8 @@
 {% block body %}
 
     <h1>{{ artist }} <span class="btn-group ml-3">
-        <button class="btn btn-sm btn-primary">{{ subCount }}</button>
-        <button class="btn btn-sm btn-primary"><i class="far fa-star"></i></button>
+        <button id="subCount" class="btn btn-sm btn-primary">{{ subCount }} Subscribers</button>
+        {% if artist != app.user.username %}<a href="/api/user/{{ artist }}/togglesubscribe" class="btn btn-sm btn-primary"><i id="subButton" class="{% if subscribed %}fas{% else %}far{% endif %} fa-star"></i></a>{% endif %}
     </span></h1>
 
     <div class="card-columns">
@@ -36,11 +36,5 @@
             <a class="page-link"{% if currentPage < pages %} href="/u/{{ artist }}/{{ pages }}"{% endif %}><i class="fas fa-angle-double-right"></i></a>
         </li>
     </ul>
-
-{% endblock %}
-
-{% block javascripts %}
-
-
 
 {% endblock %}

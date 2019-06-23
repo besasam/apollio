@@ -31,4 +31,14 @@ class EventController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/user/delete/success")
+     */
+    public function userDeleteSuccess() {
+        return $this->render('alert.html.twig', [
+            "type" => "success",
+            "message" => "Your account has been deleted. <a href='/' class='alert-link'>Click here</a> to return to the home page."
+        ]);
+    }
+
 }

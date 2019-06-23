@@ -6,6 +6,7 @@ namespace App\Controller\DBController\Post;
 
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use \Exception;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,14 +26,18 @@ class Subscribor extends AbstractController
      */
     public function subscribe(User $user, User $subscribed)
     {
+        $em = $this->getDoctrine()->getManager();
         try {
-            $user->addSubscription($subscribed);
+            $subscribed->addSubscriber($user);
+            $em->persist($subscribed);
+            $em->flush();
         } catch (Exception $e) {
             return new Response($e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return new Response("{'subscribers':". $subscribed->getSubscribers()->count() ."}",
-            Response::HTTP_OK, ['filetype'=>'json']);
+        //return new Response("{'subscribers':". $subscribed->getSubscribers()->count() ."}",
+        //    Response::HTTP_OK, ['filetype'=>'json']);
+        return new RedirectResponse("/u/" . $subscribed->getUsername());
     }
 
     /**
@@ -48,20 +53,24 @@ class Subscribor extends AbstractController
      */
     public function unsubscribe(User $user, User $subscribed)
     {
+        $em = $this->getDoctrine()->getManager();
         try {
-            $user->removeSubscription($subscribed);
+            $subscribed->removeSubscriber($user);
+            $em->persist($subscribed);
+            $em->flush();
         } catch (Exception $e) {
             return new Response($e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return new Response("{'subscribers':". $subscribed->getSubscribers()->count() ."}",
-            Response::HTTP_OK, ['filetype'=>'json']);
+        //return new Response("{'subscribers':". $subscribed->getSubscribers()->count() ."}",
+        //    Response::HTTP_OK, ['filetype'=>'json']);
+        return new RedirectResponse("/u/" . $subscribed->getUsername());
     }
 
     /**
      * @param $username
      * @return Response
-     * @Route("api/user/{username}/togglesubscribe", methods={"POST"})
+     * @Route("api/user/{username}/togglesubscribe", methods={"GET"})
      */
     public function toggleSubscribe($username)
     {

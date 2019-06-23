@@ -201,6 +201,20 @@ class User implements UserInterface
         return $this;
     }
 
+    public function hasSubscriber(self $subscriber): bool
+    {
+        return $this->subscribers->contains($subscriber);
+    }
+
+    public function getSubscriptionsAsArray(): array
+    {
+        $arr = [];
+        foreach ($this->subscriptions as $user) {
+            $arr[] = $user->getUsername();
+        }
+        return $arr;
+    }
+
     /**
      * @return Collection|Artwork[]
      */

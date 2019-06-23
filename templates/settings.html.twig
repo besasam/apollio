@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form method="POST" action="{{ action }}">
+        <h3>Delete account</h3>
+        <div class="form-group">
+            <label for="inputUsername">Confirm deletion by entering your username:</label>
+            <input type="text" name="usernameConfirmation" id="inputUsername" class="form-control" placeholder="Username">
+        </div>
+        <button class="btn btn-danger" type="submit">
+            Delete account
+        </button>
+    </form>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    Subscribed to: {% for user in subscribed %}<a class="btn btn-sm btn-secondary ml-2" href="/u/{{ user }}">{{ user }}</a>{% endfor %}
+
+{% endblock %}

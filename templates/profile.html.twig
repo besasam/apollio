@@ -10,13 +10,37 @@
     <div class="card-columns">
     {% for artwork in artworks %}
         <div class="card">
-            <a href="/u/{{ artist }}/view/{{ artwork.id }}"><img src="/uploads/{{ artwork.filelink }}" class="card-img-top"></a>
+            <a href="/u/{{ artist }}/view/{{ artwork.id }}"><img src="/uploads/{{ artwork.file }}" class="card-img-top"></a>
             <div class="card-body">
                 <a href="/u/{{ artist }}/view/{{ artwork.id }}"><h5 class="card-title">{{ artwork.title }}</h5></a>
-                <p class="card-text"><small class="text-muted">{{ artwork.created_at }}</small></p>
+                <p class="card-text"><small class="text-muted">{{ artwork.date.date }}</small></p>
             </div>
         </div>
     {% endfor %}
     </div>
+
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link"{% if currentPage > 1 %} href="/u/{{ artist }}"{% endif %}><i class="fas fa-angle-double-left"></i></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link"{% if currentPage > 1 %} href="/u/{{ artist }}{% if currentPage > 2 %}/{{ currentPage - 1 }}{% endif %}"{% endif %}><i class="fas fa-angle-left"></i></a>
+        </li>
+        {% if currentPage > 1 %}<li class="page-item"><a class="page-link" href="#">{{ currentPage - 1 }}</a></li>{% endif %}
+        <li class="page-item"><a class="page-link">{{ currentPage }}</a></li>
+        {% if currentPage < pages %}<li class="page-item"><a class="page-link" href="#">{{ currentPage + 1 }}</a></li>{% endif %}
+        <li class="page-item">
+            <a class="page-link"{% if currentPage < pages %} href="/u/{{ artist }}/{{ currentPage + 1 }}"{% endif %}><i class="fas fa-angle-right"></i></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link"{% if currentPage < pages %} href="/u/{{ artist }}/{{ pages }}"{% endif %}><i class="fas fa-angle-double-right"></i></a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block javascripts %}
+
+
 
 {% endblock %}

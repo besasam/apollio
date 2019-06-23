@@ -4,9 +4,11 @@
 namespace App\Controller;
 
 
+use App\Controller\DBController\Get\ArtworkGetter;
+use App\Controller\DBController\Get\ProfileGetter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends AbstractController
 {
@@ -15,7 +17,11 @@ class PageController extends AbstractController
      * @Route("/", name="index")
      */
     public function index() {
-        return $this->render('home.html.twig');
+        $ag = new ArtworkGetter();
+        $data = (array) json_decode($ag->getAllArtworks(10, 0, $this->getDoctrine())->getContent());
+        return $this->render('home.html.twig', [
+            "artworks" => $data["artworks"]
+        ]);
     }
 
     /**
@@ -40,28 +46,46 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/u/{user}", name="profile")
+     * @Route("/u/{user}/{page}", name="profile", defaults={"page"=1})
      */
-    public function profile($user) {
+    public function profile($user, $page) {
+        $pg = new ProfileGetter();
+        if($page == 1) {
+            $data = (array) json_decode($pg->getProfile($user, 0, $this->getDoctrine())->getContent());
+        } else {
+            $offset = ($page - 1) * 10;
+            $data = (array) json_decode($pg->getProfile($user, $offset, $this->getDoctrine())->getContent());
+        }
+        $pages = intdiv($data["awCount"], 10) + 1;
         return $this->render('profile.html.twig', [
             "artist" => $user,
-            "subCount" => 12, "artworks" => [
-                ["id" => "id", "title" => "title", "filelink" => "filelink", "artist" => "artist", "created_at" => "created_at"]
-            ]]);
-    }
-
-    /**
-     * @Route("/u/{user}/{page}", name="profile-paginated"), requirements={"page"="\d+"}
-     */
-    public function profilePaginated($user, $page) {
-        return $this->render('profile.html.twig');
+            "currentPage" => $page,
+            "pages" => $pages,
+            "subCount" => $data["subCount"],
+            "awCount" => $data["awCount"],
+            "artworks" => $data["artworks"]
+        ]);
     }
 
     /**
      * @Route("/u/{user}/view/{artwork}", name="viewArtwork")
      */
     public function view($user, $artwork) {
-        return $this->render('artwork.html.twig', ["artist" => $user, "artwork" => ["title" => "title", "filelink" => "#"]]);
+        $ag = new ArtworkGetter();
+        $data = (array) json_decode($ag->getArtworkById($artwork, $this->getDoctrine())->getContent());
+        if($data["artist"] == $user) {
+            return $this->render('artwork.html.twig', [
+                "artist" => $data["artist"],
+                "title" => $data["title"],
+                "file" => $data["file"],
+                "date" => $data["date"]->date
+            ]);
+        } else {
+            return $this->render('alert.html.twig', [
+                "type" => "error",
+                "message" => "Artwork not found for user " . $user,
+            ]);
+        }
     }
 
     /**

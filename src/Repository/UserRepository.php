@@ -28,9 +28,6 @@ class UserRepository extends ServiceEntityRepository
         $query = $em->createQuery(
             'SELECT a FROM App\Entity\Artwork a WHERE a.artist = :u order by a.created_at desc'
         )->setParameters(['u'=>$u])->setMaxResults($n)->setFirstResult($offset);
-
-        //TODO Verify that setMaxResults->setFirstResults returns the right result
-
         return $query->execute();
 
     }

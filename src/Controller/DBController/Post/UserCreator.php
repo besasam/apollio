@@ -6,6 +6,7 @@ namespace App\Controller\DBController\Post;
 
 use App\Entity\User;
 use \Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,7 +51,8 @@ class UserCreator extends AbstractController
             $newUser->setEmail($data["email"]);
             $entityManager->persist($newUser);
             $entityManager->flush(); //committing the new object to the database
-            return new Response("New user created!", Response::HTTP_CREATED);
+            //return new Response("New user created!", Response::HTTP_CREATED);
+            return new RedirectResponse("/register/success");
         } catch (Exception $e) {
             return new Response($e, Response::HTTP_INTERNAL_SERVER_ERROR);
         }

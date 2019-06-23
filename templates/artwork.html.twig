@@ -2,9 +2,11 @@
 
 {% block body %}
 
-    <h1>{{ artwork.title }}</h1>
+    <h1>{{ title }}</h1>
     <p>by <strong><a href="/u/{{ artist }}">{{ artist }}</a></strong></p>
 
-    <img src="/uploads/{{ artwork.filelink }}" width="auto">
+    <img src="/uploads/{{ file }}" style="max-width:100%">
+
+    <p>{{ date }}</p>
 
 {% endblock %}

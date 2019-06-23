@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -78,6 +79,7 @@ class ArtworkCreator extends AbstractController
             );
         }
 
-        return new Response($newArtwork->getId(), Response::HTTP_OK);
+        //return new Response($newArtwork->getId(), Response::HTTP_OK);
+        return new RedirectResponse("/upload/success/" . $newArtwork->getId());
     }
 }
